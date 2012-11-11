@@ -133,8 +133,8 @@ class Auth extends CI_Controller
 			$this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean|min_length['.$this->config->item('password_min_length', 'tank_auth').']|max_length['.$this->config->item('password_max_length', 'tank_auth').']|alpha_dash');
 			$this->form_validation->set_rules('confirm_password', 'Confirm Password', 'trim|required|xss_clean|matches[password]');
 			$fields = array();
-			foreach ($this->config->item('additional_reg_fields') as $field) {
-				$this->form_validation->set_rules($field['name'], $field['public_name', $field['form_validation']);
+			foreach ($this->config->item('additional_reg_fields', 'tank_auth') as $field) {
+				$this->form_validation->set_rules($field['name'], $field['public_name'], $field['form_validation']);
 				$fields[] = $field['name'];
 			}
 			$captcha_registration	= $this->config->item('captcha_registration', 'tank_auth');

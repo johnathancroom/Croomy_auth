@@ -198,7 +198,6 @@ class Tank_auth
 				'username'	=> $username,
 				'password'	=> $hashed_password,
 				'email'		=> $email,
-				'f_values'	=> $users_values,
 				'last_ip'	=> $this->ci->input->ip_address(),
 			);
 			$other_values = array();

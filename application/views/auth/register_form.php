@@ -62,7 +62,7 @@ $captcha = array(
 	<?php foreach($additional_fields as $field): ?>
 	<tr>
 		<td><?php echo form_label($field['public_name'], $field['name']); ?></td>
-		<td><?php echo form_input($field['name'], set_value($field['name']); ?></td>
+		<td><?php echo form_input($field['name'], set_value($field['name'])); ?></td>
 		<td style="color: red;"><?php echo form_error($field['name']); ?></td>
 	</tr>
 	<?php endforeach; ?>
