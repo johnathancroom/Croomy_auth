@@ -150,6 +150,17 @@ class Users extends CI_Model
 		}
 		return NULL;
 	}
+	
+#	function                                 $this->ci->users->add_additional_fields($other_values, $data['user_id']);
+	function add_additional_fields($array, $user_id) {
+		$data = array();
+		foreach ($array as $line) {
+			$data[$line['table']][$line['key']] = $line['value'];
+		}
+		foreach ($data as $k => $v) {
+			$this->db->insert($k, $v);
+		}
+	}
 
 	/**
 	 * Activate user if activation key is valid.

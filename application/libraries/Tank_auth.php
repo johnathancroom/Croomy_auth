@@ -212,6 +212,7 @@ class Tank_auth
 						else {
 							$other_values[] = array(
 								'table' => $table_array[0],
+								'key'	=> $f_key,
 								'value' => $f_value
 							);
 						}
@@ -224,6 +225,7 @@ class Tank_auth
 			}
 			if (!is_null($res = $this->ci->users->create_user($data, !$email_activation))) {
 				$data['user_id'] = $res['user_id'];
+				$this->ci->users->add_additional_fields($other_values, $data['user_id']);
 				$data['password'] = $password;
 				unset($data['last_ip']);
 				return $data;
