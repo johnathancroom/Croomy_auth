@@ -238,7 +238,7 @@ class Tank_auth
 	 */
 	function change_email($email)
 	{
-		$user_id = $this->ci->session->userdata('user_id');
+		$user_id = $this->get_user_id();
 
 		if (!is_null($user = $this->ci->users->get_user_by_id($user_id, FALSE))) {
 
@@ -380,7 +380,7 @@ class Tank_auth
 	 */
 	function change_password($old_pass, $new_pass)
 	{
-		$user_id = $this->ci->session->userdata('user_id');
+		$user_id = $this->get_user_id();
 
 		if (!is_null($user = $this->ci->users->get_user_by_id($user_id, TRUE))) {
 
@@ -415,7 +415,7 @@ class Tank_auth
 	 */
 	function set_new_email($new_email, $password)
 	{
-		$user_id = $this->ci->session->userdata('user_id');
+		$user_id = $this->get_user_id();
 
 		if (!is_null($user = $this->ci->users->get_user_by_id($user_id, TRUE))) {
 
@@ -478,7 +478,7 @@ class Tank_auth
 	 */
 	function delete_user($password)
 	{
-		$user_id = $this->ci->session->userdata('user_id');
+		$user_id = $this->get_user_id();
 
 		if (!is_null($user = $this->ci->users->get_user_by_id($user_id, TRUE))) {
 
