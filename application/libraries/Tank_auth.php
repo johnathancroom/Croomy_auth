@@ -150,6 +150,16 @@ class Tank_auth
 	}
 
 	/**
+   * Get user array
+   *
+   * @return array
+   */
+  function get_user()
+  {
+    return $this->ci->users->get_user_by_id($this->get_user_id(), TRUE);
+  }
+
+	/**
 	 * Create new user on the site and return some data about it:
 	 * user_id, username, password, email, new_email_key (if any).
 	 *
