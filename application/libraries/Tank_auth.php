@@ -150,24 +150,24 @@ class Tank_auth
 	}
 
 	/**
-   * Get user object
-   *
-   * @return object
-   */
-  function get_user()
-  {
-    return $this->ci->users->get_user_by_id($this->get_user_id(), TRUE);
-  }
-
-  /**
-   * Get user array
-   *
-   * @return array
-   */
-  function get_user_array()
-  {
-    return $this->ci->users->get_user_by_id($this->get_user_id(), TRUE, TRUE);
-  }
+	* Get user object
+	*
+	* @return object
+	*/
+	function get_user()
+	{
+		return $this->ci->users->get_user_by_id($this->get_user_id(), TRUE);
+	}
+	
+	/**
+	* Get user array
+	*
+	* @return array
+	*/
+	function get_user_array()
+	{
+		return $this->ci->users->get_user_by_id($this->get_user_id(), TRUE, TRUE);
+	}
 
 	/**
 	 * Create new user on the site and return some data about it:
@@ -179,7 +179,7 @@ class Tank_auth
 	 * @param	bool
 	 * @return	array
 	 */
-	function create_user($username, $email, $password, $email_activation)
+	function create_user($username, $email, $password, $f_values, $email_activation)
 	{
 		if ((strlen($username) > 0) AND !$this->ci->users->is_username_available($username)) {
 			$this->error = array('username' => 'auth_username_in_use');
@@ -193,13 +193,31 @@ class Tank_auth
 					$this->ci->config->item('phpass_hash_strength', 'tank_auth'),
 					$this->ci->config->item('phpass_hash_portable', 'tank_auth'));
 			$hashed_password = $hasher->HashPassword($password);
-
+			$additional_fields = $this->ci->config->item('additional_reg_fields', 'tank_auth');
 			$data = array(
 				'username'	=> $username,
 				'password'	=> $hashed_password,
 				'email'		=> $email,
+				'f_values'	=> $users_values,
 				'last_ip'	=> $this->ci->input->ip_address(),
 			);
+			$other_values = array();
+			foreach ($f_values as $f_key => $f_value) {
+				foreach ($additional_fields as $v) {
+					if ($v['name'] == $f_key) {
+						$table_array = explode('.', $v['database_column']);
+						if ($table_array[0] == 'users') {
+							$data[$table_array[1]] = $f_value;
+						}
+						else {
+							$other_values[] = array(
+								'table' => $table_array[0],
+								'value' => $f_value
+							);
+						}
+					}
+				}
+			}
 
 			if ($email_activation) {
 				$data['new_email_key'] = md5(rand().microtime());
