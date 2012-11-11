@@ -150,13 +150,23 @@ class Tank_auth
 	}
 
 	/**
-   * Get user array
+   * Get user object
    *
-   * @return array
+   * @return object
    */
   function get_user()
   {
     return $this->ci->users->get_user_by_id($this->get_user_id(), TRUE);
+  }
+
+  /**
+   * Get user array
+   *
+   * @return array
+   */
+  function get_user_array()
+  {
+    return $this->ci->users->get_user_by_id($this->get_user_id(), TRUE, TRUE);
   }
 
 	/**
