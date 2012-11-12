@@ -149,7 +149,8 @@ class Auth extends CI_Controller
 			$data['errors'] = array();
 
 			$email_activation = $this->config->item('email_activation', 'tank_auth');
-
+			$admin_approval = $this->config->item('admin_approval', 'tank_auth');
+			
 			if ($this->form_validation->run()) {								// validation ok
 				$f_values = array();
 				foreach ($fields as $field) {
@@ -160,10 +161,11 @@ class Auth extends CI_Controller
 						$this->form_validation->set_value('email'),
 						$this->form_validation->set_value('password'),
 						$f_values,
-						$email_activation))) {									// success
+						$email_activation,
+						$admin_approval))) {									// success
 
 					$data['site_name'] = $this->config->item('website_name', 'tank_auth');
-
+					
 					if ($email_activation) {									// send "activate" email
 						$data['activation_period'] = $this->config->item('email_activation_expire', 'tank_auth') / 3600;
 
@@ -181,6 +183,9 @@ class Auth extends CI_Controller
 						unset($data['password']); // Clear password (just for any case)
 
 						$this->_show_message($this->lang->line('auth_message_registration_completed_2').' '.anchor('/auth/login/', 'Login'));
+					}
+					if ($admin_approval) {
+						$this->_send_email('admin_approval', $this->config->item('webmaster_email', 'tank_auth'), $data);
 					}
 				} else {
 					$errors = $this->tank_auth->get_error_message();
@@ -256,6 +261,21 @@ class Auth extends CI_Controller
 
 		} else {																// fail
 			$this->_show_message($this->lang->line('auth_message_activation_failed'));
+		}
+	}
+
+	/**
+	 * Function for the admin to approve a user
+	 *
+	 * @return void
+	 */
+	function admin_approve() {
+		$admin_key = $this->uri->segment(3);
+		if ($this->tank_auth->approve($admin_key)) {
+			echo 'User successfully activated!';
+		}
+		else {
+			echo 'User failed to be activated.';
 		}
 	}
 

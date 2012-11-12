@@ -136,11 +136,11 @@ class Users extends CI_Model
 	 * @param	bool
 	 * @return	array
 	 */
-	function create_user($data, $activated = TRUE)
+	function create_user($data, $activated = TRUE, $admin = TRUE)
 	{
 		$data['created'] = date('Y-m-d H:i:s');
 		$data['activated'] = $activated ? 1 : 0;
-
+		$data['approved'] = $admin ? 1 : 0;
 		if ($this->db->insert($this->table_name, $data)) {
 			$user_id = $this->db->insert_id();
 			return array('user_id' => $user_id);

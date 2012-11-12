@@ -179,7 +179,7 @@ class Tank_auth
 	 * @param	bool
 	 * @return	array
 	 */
-	function create_user($username, $email, $password, $f_values, $email_activation)
+	function create_user($username, $email, $password, $f_values, $email_activation, $admin_approval)
 	{
 		if ((strlen($username) > 0) AND !$this->ci->users->is_username_available($username)) {
 			$this->error = array('username' => 'auth_username_in_use');
@@ -227,7 +227,10 @@ class Tank_auth
 			if ($email_activation) {
 				$data['new_email_key'] = md5(rand().microtime());
 			}
-			if (!is_null($res = $this->ci->users->create_user($data, !$email_activation))) {
+			if ($admin_approval) {
+				$data['admin_key'] = md5(rand().microtime());
+			}
+			if (!is_null($res = $this->ci->users->create_user($data, !$email_activation, !$admin_approval))) {
 				$data['user_id'] = $res['user_id'];
 				$this->ci->users->add_additional_fields($other_values, $data['user_id']);
 				$data['password'] = $password;
@@ -502,6 +505,24 @@ class Tank_auth
 					$new_email_key);
 		}
 		return FALSE;
+	}
+
+	/**
+	 * Approves new user
+	 *
+	 * @param	string
+	 * @return	bool
+	 */
+	function approve($admin_key) {
+		$query = $this->db->where('admin_key', $admin_key)->get('users');
+		if ($query->num_rows() == 0) {
+			return False;
+		}
+		else {
+			$this->db->where('admin_key', $admin_key);
+			$this->db->update('users', array('approved' => 1));
+			return True;
+		}
 	}
 
 	/**

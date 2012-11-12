@@ -53,6 +53,17 @@ $config['password_max_length'] = 20;
 
 /*
 |--------------------------------------------------------------------------
+| User approval option
+|
+| Set equal to TRUE to have an e-mail sent to $config['webmaster_email'] each time a user
+| registers to have them either approved or denied. Users will not be able to login until
+| they are both approved by the webmaster and (if enabled) verify their e-mail address.
+|--------------------------------------------------------------------------
+*/
+$config['admin_approval'] = FALSE;
+
+/*
+|--------------------------------------------------------------------------
 | Login settings
 |
 | 'login_by_username' = Username can be used to login.
