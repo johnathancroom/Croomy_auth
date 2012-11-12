@@ -1,29 +1,10 @@
-Tank Auth is an authentication library for PHP-framework CodeIgniter. It's based on DX Auth, althouth the code was seriously reworked.
+Croomy Auth is an authentication library for the PHP framework CodeIgniter. It's based on Tank Auth, which was based on DX Auth, although the code was seriously reworked, twice.
 
-If you would like to work on Croomy_auth, use the .gitignore file found at the Gist located https://gist.github.com/4056851
+If you would like to work on Croomy_auth, use the .gitignore file found at the Gist located at https://gist.github.com/4056851
 
 Changelog
 
-1.0.9
-PHPass settings are moved to config-file for better control over user data.
-1.0.8
-Some technical changes to make the library compatible with CodeIgniter v.2.0.0.
-1.0.7
-New parameter 'db_table_prefix' is added to config-file. It defines prefix prepended to every table name (except 'ci_sessions') used by the library.
-1.0.6
-Resetting forgotten password option is added for non-activated user. Clicking a link in resetting password email activates user as well.
-1.0.5
-Minor changes resulting from the CI-community feedback.
-1.0.4
-A sample controller welcome is added, to demonstrate how to use the library. The library successfully tested with OBSession.
-1.0.3
-Small bug fixes. The database structure is not affected.
-1.0.2
-SQL injection is fixed (thanks to Laurentvw).
-1.0.1
-use_username config-parameter is added. Now username is optional (only email is necessary).
-1.0.0
-The library is released.
+0.1 - Croomy Auth forked from Tank_auth.
 
 
 Features
@@ -51,6 +32,7 @@ It's easy to manage
 It's full featured
 * Login using username, email address or both (depending on config settings).
 * Registration is instant or after activation by email (optional).
+* Ability to add custom fields to the registration from and have that data INSERT into different tables.
 * "Remember me" option.
 * Forgot password (letting users pick a new password upon reactivation).
 * Change password or email for registered users.
