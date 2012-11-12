@@ -17,7 +17,7 @@ It's simple
 * Username is optional, only email is obligatory.
 
 It's secure
-* Using salt + sha1 hash for passwords and openssl_random_pseudo_bytes() for salt values.
+* Uses a salt + SHA-512 hash for passwords and openssl_random_pseudo_bytes() for salt values.
 * Counting login attempt for bruteforce preventing (optional). Failed login attempts determined by IP and by username.
 * Logging last login IP-address and time (optional).
 * CAPTCHA for registration and repetitive login attempt (optional).
