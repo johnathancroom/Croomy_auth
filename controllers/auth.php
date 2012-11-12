@@ -185,7 +185,7 @@ class Auth extends CI_Controller
 						$this->_show_message($this->lang->line('auth_message_registration_completed_2').' '.anchor('/auth/login/', 'Login'));
 					}
 					if ($admin_approval) {
-						$this->_send_email('admin_approval', $this->config->item('webmaster_email', 'tank_auth'), $data);
+						$this->_send_email('admin-approve', $this->config->item('webmaster_email', 'tank_auth'), $data);
 					}
 				} else {
 					$errors = $this->tank_auth->get_error_message();
