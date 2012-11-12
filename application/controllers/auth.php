@@ -589,6 +589,12 @@ class Auth extends CI_Controller
 		return TRUE;
 	}
 
+	/**
+	 * is_logged_in() function for AJAX requests
+	 */
+	function is_logged() {
+		echo $this->tank_auth->is_logged_in();
+	}
 }
 
 /* End of file auth.php */
