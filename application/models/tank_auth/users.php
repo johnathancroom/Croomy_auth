@@ -5,7 +5,6 @@
  *
  * This model represents user authentication data. It operates the following tables:
  * - user account data,
- * - user profiles
  *
  * @package	Tank_auth
  * @author	Ilya Konyukhov (http://konyukhov.com/soft/)
@@ -21,7 +20,6 @@ class Users extends CI_Model
 
 		$ci =& get_instance();
 		$this->table_name			= $ci->config->item('db_table_prefix', 'tank_auth').$this->table_name;
-		$this->profile_table_name	= $ci->config->item('db_table_prefix', 'tank_auth').$this->profile_table_name;
 	}
 
 	/**
@@ -145,7 +143,6 @@ class Users extends CI_Model
 
 		if ($this->db->insert($this->table_name, $data)) {
 			$user_id = $this->db->insert_id();
-			if ($activated)	$this->create_profile($user_id);
 			return array('user_id' => $user_id);
 		}
 		return NULL;
@@ -202,8 +199,6 @@ class Users extends CI_Model
 			$this->db->set('new_email_key', NULL);
 			$this->db->where('id', $user_id);
 			$this->db->update($this->table_name);
-
-			$this->create_profile($user_id);
 			return TRUE;
 		}
 		return FALSE;
@@ -406,29 +401,6 @@ class Users extends CI_Model
 		));
 	}
 
-	/**
-	 * Create an empty profile for a new user
-	 *
-	 * @param	int
-	 * @return	bool
-	 */
-	private function create_profile($user_id)
-	{
-		$this->db->set('user_id', $user_id);
-		return $this->db->insert($this->profile_table_name);
-	}
-
-	/**
-	 * Delete user profile
-	 *
-	 * @param	int
-	 * @return	void
-	 */
-	private function delete_profile($user_id)
-	{
-		$this->db->where('user_id', $user_id);
-		$this->db->delete($this->profile_table_name);
-	}
 }
 
 /* End of file users.php */
