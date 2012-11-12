@@ -1,5 +1,6 @@
 Tank Auth is an authentication library for PHP-framework CodeIgniter. It's based on DX Auth, althouth the code was seriously reworked.
 
+If you would like to work on Croomy_auth, use the .gitignore file found at the Gist located https://gist.github.com/4056851
 
 Changelog
 
