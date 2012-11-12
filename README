@@ -17,7 +17,7 @@ It's simple
 * Username is optional, only email is obligatory.
 
 It's secure
-* Using phpass library for password hashing (instead of unsafe md5).
+* Using salt + sha1 hash for passwords and openssl_random_pseudo_bytes() for salt values.
 * Counting login attempt for bruteforce preventing (optional). Failed login attempts determined by IP and by username.
 * Logging last login IP-address and time (optional).
 * CAPTCHA for registration and repetitive login attempt (optional).
@@ -53,7 +53,6 @@ Installing Tank Auth
 6. Open the application/config/config.php file in your CI installation and change $config['sess_use_database'] value to TRUE.
 That's it!
 Please don't forget to look into config files (tank_auth.php and email.php) if something will go wrong. The library should work perfectly right after installation, but depending on your server condition and your own needs some options would better be changed.
-WARNING: By default the library generates strong system-specific password hashes that are not portable. It means that once created, user database cannot be dumped and exported to another server. This behavior can be changed in config-file as well.
 
 
 The library in a nutshell
