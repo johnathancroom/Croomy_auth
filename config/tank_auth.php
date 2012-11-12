@@ -60,7 +60,7 @@ $config['password_max_length'] = 20;
 | they are both approved by the webmaster and (if enabled) verify their e-mail address.
 |--------------------------------------------------------------------------
 */
-$config['admin_approval'] = FALSE;
+$config['admin_approval'] = TRUE;
 
 /*
 |--------------------------------------------------------------------------

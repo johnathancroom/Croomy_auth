@@ -66,15 +66,16 @@ class Tank_auth
 						$this->ci->session->set_userdata(array(
 								'user_id'	=> $user->id,
 								'username'	=> $user->username,
-								'status'	=> ($user->activated == 1) ? STATUS_ACTIVATED : STATUS_NOT_ACTIVATED,
+								'status'	=> ($user->activated) ? STATUS_ACTIVATED : STATUS_NOT_ACTIVATED,
+								'approved'	=> ($user->approved) ? True : False
 						));
 
-						if ($user->activated == 0) {							// fail - not activated
+						if (!$user->activated) {							// fail - not activated
 							$this->error = array('not_activated' => '');
 
 						} 
-						elseif ($user->approved == 0) {
-							$this->error = array('not_activated' => '');
+						elseif (!$user->approved) {
+							$this->error = array('not_approved' => '');
 						}
 						else {												// success
 							if ($remember) {
@@ -126,6 +127,10 @@ class Tank_auth
 	function is_logged_in($activated = TRUE)
 	{
 		return $this->ci->session->userdata('status') === ($activated ? STATUS_ACTIVATED : STATUS_NOT_ACTIVATED);
+	}
+	
+	function is_approved() {
+		return $this->ci->session->userdata('approved');
 	}
 
 	/**

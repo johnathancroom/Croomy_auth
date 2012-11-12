@@ -32,6 +32,9 @@ class Auth extends CI_Controller
 		if ($this->tank_auth->is_logged_in()) {									// logged in
 			redirect('');
 
+		} elseif ($this->tank_auth->is_approved()) {
+			echo 'You have not been activated. Please wait.';
+			return;
 		} elseif ($this->tank_auth->is_logged_in(FALSE)) {						// logged in, not activated
 			redirect('/auth/send_again/');
 
@@ -77,7 +80,9 @@ class Auth extends CI_Controller
 
 					} elseif (isset($errors['not_activated'])) {				// not activated user
 						redirect('/auth/send_again/');
-
+					} elseif (isset($errors['not_approved'])) {
+						echo 'You have not been approved. Please wait';
+						return;
 					} else {													// fail
 						foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 					}
