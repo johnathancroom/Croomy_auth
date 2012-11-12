@@ -517,16 +517,28 @@ class Tank_auth
 	 * @return	bool
 	 */
 	function approve($admin_key) {
-		$query = $this->db->where('admin_key', $admin_key)->get('users');
+		$query = $this->ci->db->where('admin_key', $admin_key)->get('users');
 		if ($query->num_rows() == 0) {
 			return False;
 		}
 		else {
-			$this->db->where('admin_key', $admin_key);
-			$this->db->update('users', array('approved' => 1));
+			$this->ci->db->where('admin_key', $admin_key);
+			$this->ci->db->update('users', array('approved' => 1, 'admin_key' => ''));
 			return True;
 		}
 	}
+
+        function deny($admin_key) {
+                $query = $this->ci->db->where('admin_key', $admin_key)->get('users');
+                if ($query->num_rows() == 0) {
+                        return False;
+                }
+                else {
+                        $this->ci->db->where('admin_key', $admin_key);
+                        $this->ci->db->update('users', array('banned' => 1, 'approved' => 0, 'activated' => 0, 'admin_key' => ''));
+                        return True;
+                }
+        }
 
 	/**
 	 * Delete user from the site (only when user is logged in)

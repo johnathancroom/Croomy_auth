@@ -11,8 +11,8 @@
 A new user has just joined <?php echo $site_name; ?>. You can either approve them or deny them with the links below.<br />
 To verify your email address, please follow this link:<br />
 <br />
-<big style="font: 16px/18px Arial, Helvetica, sans-serif;"><b><a href="<?php echo site_url('/auth/admin_approve/' . $new_email_key); ?>" style="color: #3366cc;">Approve user</a></b></big><br />
-<big style="font: 16px/18px Arial, Helvetica, sans-serif;"><b><a href="<?php echo site_url('/auth/admin_deny/' . $new_email_key); ?>" style="color: #FF0000;">Deny user</a></b></big><br />
+<big style="font: 16px/18px Arial, Helvetica, sans-serif;"><b><a href="<?php echo site_url('/auth/admin_approve/' . $admin_key); ?>" style="color: #3366cc;">Approve user</a></b></big><br />
+<big style="font: 16px/18px Arial, Helvetica, sans-serif;"><b><a href="<?php echo site_url('/auth/admin_deny/' . $admin_key); ?>" style="color: #FF0000;">Deny user</a></b></big><br />
 <br />
 <?php if (strlen($username) > 0) { ?>New username: <?php echo $username; ?><br /><?php } ?>
 User's email address: <?php echo $email; ?><br />

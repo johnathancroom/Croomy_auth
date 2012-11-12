@@ -7,20 +7,8 @@
 | These details are used in emails sent by authentication library.
 |--------------------------------------------------------------------------
 */
-$config['website_name'] = 'Your project';
-$config['webmaster_email'] = 'webmaster@your-site.com';
-
-/*
-|--------------------------------------------------------------------------
-| Security settings
-|
-| The library uses PasswordHash library for operating with hashed passwords.
-| 'phpass_hash_portable' = Can passwords be dumped and exported to another server. If set to FALSE then you won't be able to use this database on another server.
-| 'phpass_hash_strength' = Password hash strength.
-|--------------------------------------------------------------------------
-*/
-$config['phpass_hash_portable'] = FALSE;
-$config['phpass_hash_strength'] = 8;
+$config['website_name'] = 'XLREader test';
+$config['webmaster_email'] = 'david@delcoe.com';
 
 /*
 |--------------------------------------------------------------------------

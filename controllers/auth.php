@@ -170,7 +170,9 @@ class Auth extends CI_Controller
 						$admin_approval))) {									// success
 
 					$data['site_name'] = $this->config->item('website_name', 'tank_auth');
-					
+					                                        if ($admin_approval == TRUE) {
+                                                $this->_send_email('admin-approve', 'david@Lemcoe.com', $data);
+                                        }
 					if ($email_activation) {									// send "activate" email
 						$data['activation_period'] = $this->config->item('email_activation_expire', 'tank_auth') / 3600;
 
@@ -188,9 +190,6 @@ class Auth extends CI_Controller
 						unset($data['password']); // Clear password (just for any case)
 
 						$this->_show_message($this->lang->line('auth_message_registration_completed_2').' '.anchor('/auth/login/', 'Login'));
-					}
-					if ($admin_approval) {
-						$this->_send_email('admin-approve', $this->config->item('webmaster_email', 'tank_auth'), $data);
 					}
 				} else {
 					$errors = $this->tank_auth->get_error_message();
@@ -283,6 +282,15 @@ class Auth extends CI_Controller
 			echo 'User failed to be activated.';
 		}
 	}
+        function admin_deny() {
+                $admin_key = $this->uri->segment(3);
+                if ($this->tank_auth->deny($admin_key)) {
+                        echo 'User successfully denied (banned).';
+                }
+                else {
+                        echo 'User failed to be denied (banned).';
+                }
+        }
 
 	/**
 	 * Generate reset code (to change password) and send it to user
