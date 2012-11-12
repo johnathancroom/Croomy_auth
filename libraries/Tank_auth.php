@@ -62,7 +62,7 @@ class Tank_auth
 				$hasher = new PasswordHash(
 						$this->ci->config->item('phpass_hash_strength', 'tank_auth'),
 						$this->ci->config->item('phpass_hash_portable', 'tank_auth'));
-				if ($hasher->CheckPassword($password, $user->password)) {		// password ok
+				if ($user->password == sha1($user->salt . $password)) {		// password ok
 
 					if ($user->banned == 1) {									// fail - banned
 						$this->error = array('banned' => $user->ban_reason);
@@ -77,7 +77,11 @@ class Tank_auth
 						if ($user->activated == 0) {							// fail - not activated
 							$this->error = array('not_activated' => '');
 
-						} else {												// success
+						} 
+						elseif ($user->approved == 0) {
+							$this->error = array('not_activated' => '');
+						}
+						else {												// success
 							if ($remember) {
 								$this->create_autologin($user->id);
 							}
@@ -188,15 +192,14 @@ class Tank_auth
 			$this->error = array('email' => 'auth_email_in_use');
 
 		} else {
-			// Hash password using phpass
-			$hasher = new PasswordHash(
-					$this->ci->config->item('phpass_hash_strength', 'tank_auth'),
-					$this->ci->config->item('phpass_hash_portable', 'tank_auth'));
-			$hashed_password = $hasher->HashPassword($password);
+			$salt = bin2hex(openssl_random_pseudo_bytes(10));
+			$hashed_password = sha1($salt . $password);
 			$additional_fields = $this->ci->config->item('additional_reg_fields', 'tank_auth');
+			
 			$data = array(
 				'username'	=> $username,
 				'password'	=> $hashed_password,
+				'salt'		=> $salt,
 				'email'		=> $email,
 				'last_ip'	=> $this->ci->input->ip_address(),
 			);
