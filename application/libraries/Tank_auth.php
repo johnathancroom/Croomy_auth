@@ -204,16 +204,21 @@ class Tank_auth
 			foreach ($f_values as $f_key => $f_value) {
 				foreach ($additional_fields as $v) {
 					if ($v['name'] == $f_key) {
-						$table_array = explode('.', $v['database_column']);
-						if ($table_array[0] == 'users') {
-							$data[$table_array[1]] = $f_value;
+						if (isset($v['database_column'])) {
+							$table_array = explode('.', $v['database_column']);
+							if ($table_array[0] == 'users') {
+								$data[$table_array[1]] = $f_value;
+							}
+							else {
+								$other_values[] = array(
+									'table' => $table_array[0],
+									'key' 	=> $table_array[1],
+									'value'	=> $f_value
+								);
+							}
 						}
 						else {
-							$other_values[] = array(
-								'table' => $table_array[0],
-								'key'	=> $f_key,
-								'value' => $f_value
-							);
+							$data[$f_key] = $f_value;
 						}
 					}
 				}

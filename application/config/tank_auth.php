@@ -40,7 +40,7 @@ $config['phpass_hash_strength'] = 8;
 |--------------------------------------------------------------------------
 */
 $config['allow_registration'] = TRUE;
-$config['captcha_registration'] = TRUE;
+$config['captcha_registration'] = FALSE;
 $config['email_activation'] = TRUE;
 $config['email_activation_expire'] = 60*60*24*2;
 $config['email_account_details'] = TRUE;
@@ -105,15 +105,21 @@ $config['login_attempt_expire'] = 60*60*24;
 | Using the previous field as an example, if you wanted the newly-generated user ID to go into the 'user'
 | column of the `my_table` table, you could set the directive like this:
 | $config['table_settings'] = array(
-| 	array(
-|		'my_table' => 'user'
-| 	)
+|	'my_table' => 'user'
 | );
 |
 |--------------------------------------------------------------------------
 */
-$config['additional_reg_fields'] = array();
-$config['table_settings'] = array();
+$config['additional_reg_fields'] = array(
+	array(
+		'name' => 'testing',
+		'public_name' => 'Testing',
+		'form_validation' => 'required',
+		'database_column' => 'data.david',
+		'input_type' 	=> 'text'
+	)
+);
+$config['table_settings'] = array('data' => 'user');
 
 /*
 |--------------------------------------------------------------------------

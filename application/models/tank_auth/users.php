@@ -150,14 +150,27 @@ class Users extends CI_Model
 		}
 		return NULL;
 	}
-	
-#	function                                 $this->ci->users->add_additional_fields($other_values, $data['user_id']);
+	 /**
+	  * Adds user-specified fields to the tables of choice
+	  *
+	  * @param	array
+	  * @param	int
+	  * @return 	bool
+	 */	
 	function add_additional_fields($array, $user_id) {
 		$data = array();
 		foreach ($array as $line) {
 			$data[$line['table']][$line['key']] = $line['value'];
 		}
 		foreach ($data as $k => $v) {
+			$user_val = $this->config->item('table_settings', 'tank_auth');
+			if (isset($user_val[$k])) {
+				$user_col = $user_val[$k];
+			}
+			else {
+				$user_col = 'user';
+			}
+			$v[$user_col] = $user_id;
 			$this->db->insert($k, $v);
 		}
 	}
