@@ -57,10 +57,7 @@ class Tank_auth
 			if (!is_null($user = $this->ci->users->$get_user_func($login))) {	// login ok
 
 				// Does password match hash in database?
-				$hasher = new PasswordHash(
-						$this->ci->config->item('phpass_hash_strength', 'tank_auth'),
-						$this->ci->config->item('phpass_hash_portable', 'tank_auth'));
-				if ($user->password == sha1($user->salt . $password)) {		// password ok
+				if ($user->password == openssl_digest($user->salt . $password, 'sha512')) {		// password ok
 
 					if ($user->banned == 1) {									// fail - banned
 						$this->error = array('banned' => $user->ban_reason);
@@ -191,7 +188,7 @@ class Tank_auth
 
 		} else {
 			$salt = bin2hex(openssl_random_pseudo_bytes(10));
-			$hashed_password = sha1($salt . $password);
+			$hashed_password = openssl_digest($salt . $password, 'sha512');
 			$additional_fields = $this->ci->config->item('additional_reg_fields', 'tank_auth');
 			
 			$data = array(
