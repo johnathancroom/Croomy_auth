@@ -8,7 +8,6 @@ class Auth extends CI_Controller
 
 		$this->load->helper(array('form', 'url'));
 		$this->load->library('form_validation');
-		$this->load->library('security');
 		$this->load->library('tank_auth');
 		$this->lang->load('tank_auth');
 	}
@@ -16,7 +15,7 @@ class Auth extends CI_Controller
 	function index()
 	{
 		if ($message = $this->session->flashdata('message')) {
-			$this->load->view('auth/general_message', array('message' => $message));
+			$this->load->view('Croomy_auth/general_message', array('message' => $message));
 		} else {
 			redirect('/auth/login/');
 		}
@@ -97,7 +96,7 @@ class Auth extends CI_Controller
 					$data['captcha_html'] = $this->_create_captcha();
 				}
 			}
-			$this->load->view('auth/login_form', $data);
+			$this->load->view('Croomy_auth/login_form', $data);
 		}
 	}
 
@@ -155,7 +154,7 @@ class Auth extends CI_Controller
 
 			$email_activation = $this->config->item('email_activation', 'tank_auth');
 			$admin_approval = $this->config->item('admin_approval', 'tank_auth');
-			
+
 			if ($this->form_validation->run()) {								// validation ok
 				$f_values = array();
 				foreach ($fields as $field) {
@@ -170,9 +169,11 @@ class Auth extends CI_Controller
 						$admin_approval))) {									// success
 
 					$data['site_name'] = $this->config->item('website_name', 'tank_auth');
-					                                        if ($admin_approval == TRUE) {
-                                                $this->_send_email('admin-approve', 'david@Lemcoe.com', $data);
-                                        }
+
+					if ($admin_approval == TRUE) {
+						$this->_send_email('admin-approve', 'david@Lemcoe.com', $data);
+					}
+
 					if ($email_activation) {									// send "activate" email
 						$data['activation_period'] = $this->config->item('email_activation_expire', 'tank_auth') / 3600;
 
@@ -207,7 +208,7 @@ class Auth extends CI_Controller
 			$data['captcha_registration'] = $captcha_registration;
 			$data['use_recaptcha'] = $use_recaptcha;
 			$data['additional_fields'] = $this->config->item('additional_reg_fields', 'tank_auth');
-			$this->load->view('auth/register_form', $data);
+			$this->load->view('Croomy_auth/register_form', $data);
 		}
 	}
 
@@ -242,7 +243,7 @@ class Auth extends CI_Controller
 					foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 				}
 			}
-			$this->load->view('auth/send_again_form', $data);
+			$this->load->view('Croomy_auth/send_again_form', $data);
 		}
 	}
 
@@ -282,15 +283,15 @@ class Auth extends CI_Controller
 			echo 'User failed to be activated.';
 		}
 	}
-        function admin_deny() {
-                $admin_key = $this->uri->segment(3);
-                if ($this->tank_auth->deny($admin_key)) {
-                        echo 'User successfully denied (banned).';
-                }
-                else {
-                        echo 'User failed to be denied (banned).';
-                }
-        }
+				function admin_deny() {
+								$admin_key = $this->uri->segment(3);
+								if ($this->tank_auth->deny($admin_key)) {
+												echo 'User successfully denied (banned).';
+								}
+								else {
+												echo 'User failed to be denied (banned).';
+								}
+				}
 
 	/**
 	 * Generate reset code (to change password) and send it to user
@@ -326,7 +327,7 @@ class Auth extends CI_Controller
 					foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 				}
 			}
-			$this->load->view('auth/forgot_password_form', $data);
+			$this->load->view('Croomy_auth/forgot_password_form', $data);
 		}
 	}
 
@@ -372,7 +373,7 @@ class Auth extends CI_Controller
 				$this->_show_message($this->lang->line('auth_message_new_password_failed'));
 			}
 		}
-		$this->load->view('auth/reset_password_form', $data);
+		$this->load->view('Croomy_auth/reset_password_form', $data);
 	}
 
 	/**
@@ -403,7 +404,7 @@ class Auth extends CI_Controller
 					foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 				}
 			}
-			$this->load->view('auth/change_password_form', $data);
+			$this->load->view('Croomy_auth/change_password_form', $data);
 		}
 	}
 
@@ -440,7 +441,7 @@ class Auth extends CI_Controller
 					foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 				}
 			}
-			$this->load->view('auth/change_email_form', $data);
+			$this->load->view('Croomy_auth/change_email_form', $data);
 		}
 	}
 
@@ -491,7 +492,7 @@ class Auth extends CI_Controller
 					foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 				}
 			}
-			$this->load->view('auth/unregister_form', $data);
+			$this->load->view('Croomy_auth/unregister_form', $data);
 		}
 	}
 
