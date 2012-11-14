@@ -171,7 +171,7 @@ class Auth extends CI_Controller
 					$data['site_name'] = $this->config->item('website_name', 'tank_auth');
 
 					if ($admin_approval == TRUE) {
-						$this->_send_email('admin-approve', 'david@Lemcoe.com', $data);
+						$this->_send_email('admin-approve', $this->config->item('webmaster_email', 'tank_auth'), $data);
 					}
 
 					if ($email_activation) {									// send "activate" email
