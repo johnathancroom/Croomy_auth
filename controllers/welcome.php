@@ -7,16 +7,16 @@ class Welcome extends CI_Controller
 		parent::__construct();
 
 		$this->load->helper('url');
-		$this->load->library('Croomy_auth');
+		$this->load->library('croomy_auth');
 	}
 
 	function index()
 	{
-		if (!$this->Croomy_auth->is_logged_in()) {
+		if (!$this->croomy_auth->is_logged_in()) {
 			redirect('/auth/login/');
 		} else {
-			$data['user_id']	= $this->Croomy_auth->get_user_id();
-			$data['username']	= $this->Croomy_auth->get_username();
+			$data['user_id']	= $this->croomy_auth->get_user_id();
+			$data['username']	= $this->croomy_auth->get_username();
 			$this->load->view('welcome', $data);
 		}
 	}

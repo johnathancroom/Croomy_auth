@@ -6,7 +6,7 @@ $login = array(
 	'maxlength'	=> 80,
 	'size'	=> 30,
 );
-if ($this->config->item('use_username', 'tank_auth')) {
+if ($this->config->item('use_username', 'croomy_auth')) {
 	$login_label = 'Email or login';
 } else {
 	$login_label = 'Email';

@@ -8,8 +8,8 @@ class Auth extends CI_Controller
 
 		$this->load->helper(array('form', 'url'));
 		$this->load->library('form_validation');
-		$this->load->library('Croomy_auth');
-		$this->lang->load('Croomy_auth');
+		$this->load->library('croomy_auth');
+		$this->lang->load('croomy_auth');
 	}
 
 	function index()
@@ -28,34 +28,34 @@ class Auth extends CI_Controller
 	 */
 	function login()
 	{
-		if ($this->Croomy_auth->is_logged_in()) {									// logged in
+		if ($this->croomy_auth->is_logged_in()) {									// logged in
 			redirect('');
 
-		} elseif ($this->Croomy_auth->is_approved()) {
+		} elseif ($this->croomy_auth->is_approved()) {
 			echo 'You have not been activated. Please wait.';
 			return;
-		} elseif ($this->Croomy_auth->is_logged_in(FALSE)) {						// logged in, not activated
+		} elseif ($this->croomy_auth->is_logged_in(FALSE)) {						// logged in, not activated
 			redirect('/auth/send_again/');
 
 		} else {
-			$data['login_by_username'] = ($this->config->item('login_by_username', 'Croomy_auth') AND
-					$this->config->item('use_username', 'Croomy_auth'));
-			$data['login_by_email'] = $this->config->item('login_by_email', 'Croomy_auth');
+			$data['login_by_username'] = ($this->config->item('login_by_username', 'croomy_auth') AND
+					$this->config->item('use_username', 'croomy_auth'));
+			$data['login_by_email'] = $this->config->item('login_by_email', 'croomy_auth');
 
 			$this->form_validation->set_rules('login', 'Login', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('remember', 'Remember me', 'integer');
 
 			// Get login for counting attempts to login
-			if ($this->config->item('login_count_attempts', 'Croomy_auth') AND
+			if ($this->config->item('login_count_attempts', 'croomy_auth') AND
 					($login = $this->input->post('login'))) {
 				$login = $this->security->xss_clean($login);
 			} else {
 				$login = '';
 			}
 
-			$data['use_recaptcha'] = $this->config->item('use_recaptcha', 'Croomy_auth');
-			if ($this->Croomy_auth->is_max_login_attempts_exceeded($login)) {
+			$data['use_recaptcha'] = $this->config->item('use_recaptcha', 'croomy_auth');
+			if ($this->croomy_auth->is_max_login_attempts_exceeded($login)) {
 				if ($data['use_recaptcha'])
 					$this->form_validation->set_rules('recaptcha_response_field', 'Confirmation Code', 'trim|xss_clean|required|callback__check_recaptcha');
 				else
@@ -64,7 +64,7 @@ class Auth extends CI_Controller
 			$data['errors'] = array();
 
 			if ($this->form_validation->run()) {								// validation ok
-				if ($this->Croomy_auth->login(
+				if ($this->croomy_auth->login(
 						$this->form_validation->set_value('login'),
 						$this->form_validation->set_value('password'),
 						$this->form_validation->set_value('remember'),
@@ -73,7 +73,7 @@ class Auth extends CI_Controller
 					redirect('');
 
 				} else {
-					$errors = $this->Croomy_auth->get_error_message();
+					$errors = $this->croomy_auth->get_error_message();
 					if (isset($errors['banned'])) {								// banned user
 						$this->_show_message($this->lang->line('auth_message_banned').' '.$errors['banned']);
 
@@ -88,7 +88,7 @@ class Auth extends CI_Controller
 				}
 			}
 			$data['show_captcha'] = FALSE;
-			if ($this->Croomy_auth->is_max_login_attempts_exceeded($login)) {
+			if ($this->croomy_auth->is_max_login_attempts_exceeded($login)) {
 				$data['show_captcha'] = TRUE;
 				if ($data['use_recaptcha']) {
 					$data['recaptcha_html'] = $this->_create_recaptcha();
@@ -107,7 +107,7 @@ class Auth extends CI_Controller
 	 */
 	function logout()
 	{
-		$this->Croomy_auth->logout();
+		$this->croomy_auth->logout();
 
 		$this->_show_message($this->lang->line('auth_message_logged_out'));
 	}
@@ -119,30 +119,30 @@ class Auth extends CI_Controller
 	 */
 	function register()
 	{
-		if ($this->Croomy_auth->is_logged_in()) {									// logged in
+		if ($this->croomy_auth->is_logged_in()) {									// logged in
 			redirect('');
 
-		} elseif ($this->Croomy_auth->is_logged_in(FALSE)) {						// logged in, not activated
+		} elseif ($this->croomy_auth->is_logged_in(FALSE)) {						// logged in, not activated
 			redirect('/auth/send_again/');
 
-		} elseif (!$this->config->item('allow_registration', 'Croomy_auth')) {	// registration is off
+		} elseif (!$this->config->item('allow_registration', 'croomy_auth')) {	// registration is off
 			$this->_show_message($this->lang->line('auth_message_registration_disabled'));
 
 		} else {
-			$use_username = $this->config->item('use_username', 'Croomy_auth');
+			$use_username = $this->config->item('use_username', 'croomy_auth');
 			if ($use_username) {
-				$this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean|min_length['.$this->config->item('username_min_length', 'Croomy_auth').']|max_length['.$this->config->item('username_max_length', 'tank_auth').']|alpha_dash');
+				$this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean|min_length['.$this->config->item('username_min_length', 'croomy_auth').']|max_length['.$this->config->item('username_max_length', 'tank_auth').']|alpha_dash');
 			}
 			$this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean|valid_email');
-			$this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean|min_length['.$this->config->item('password_min_length', 'Croomy_auth').']|max_length['.$this->config->item('password_max_length', 'tank_auth').']|alpha_dash');
+			$this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean|min_length['.$this->config->item('password_min_length', 'croomy_auth').']|max_length['.$this->config->item('password_max_length', 'tank_auth').']|alpha_dash');
 			$this->form_validation->set_rules('confirm_password', 'Confirm Password', 'trim|required|xss_clean|matches[password]');
 			$fields = array();
-			foreach ($this->config->item('additional_reg_fields', 'Croomy_auth') as $field) {
+			foreach ($this->config->item('additional_reg_fields', 'croomy_auth') as $field) {
 				$this->form_validation->set_rules($field['name'], $field['public_name'], $field['form_validation']);
 				$fields[] = $field['name'];
 			}
-			$captcha_registration	= $this->config->item('captcha_registration', 'Croomy_auth');
-			$use_recaptcha			= $this->config->item('use_recaptcha', 'Croomy_auth');
+			$captcha_registration	= $this->config->item('captcha_registration', 'croomy_auth');
+			$use_recaptcha			= $this->config->item('use_recaptcha', 'croomy_auth');
 			if ($captcha_registration) {
 				if ($use_recaptcha) {
 					$this->form_validation->set_rules('recaptcha_response_field', 'Confirmation Code', 'trim|xss_clean|required|callback__check_recaptcha');
@@ -152,15 +152,15 @@ class Auth extends CI_Controller
 			}
 			$data['errors'] = array();
 
-			$email_activation = $this->config->item('email_activation', 'Croomy_auth');
-			$admin_approval = $this->config->item('admin_approval', 'Croomy_auth');
+			$email_activation = $this->config->item('email_activation', 'croomy_auth');
+			$admin_approval = $this->config->item('admin_approval', 'croomy_auth');
 
 			if ($this->form_validation->run()) {								// validation ok
 				$f_values = array();
 				foreach ($fields as $field) {
 					$f_values[$field] = $this->form_validation->set_value($field);
 				}
-				if (!is_null($data = $this->Croomy_auth->create_user(
+				if (!is_null($data = $this->croomy_auth->create_user(
 						$use_username ? $this->form_validation->set_value('username') : '',
 						$this->form_validation->set_value('email'),
 						$this->form_validation->set_value('password'),
@@ -168,14 +168,14 @@ class Auth extends CI_Controller
 						$email_activation,
 						$admin_approval))) {									// success
 
-					$data['site_name'] = $this->config->item('website_name', 'Croomy_auth');
+					$data['site_name'] = $this->config->item('website_name', 'croomy_auth');
 
 					if ($admin_approval == TRUE) {
-						$this->_send_email('admin-approve', $this->config->item('webmaster_email', 'Croomy_auth'), $data);
+						$this->_send_email('admin-approve', $this->config->item('webmaster_email', 'croomy_auth'), $data);
 					}
 
 					if ($email_activation) {									// send "activate" email
-						$data['activation_period'] = $this->config->item('email_activation_expire', 'Croomy_auth') / 3600;
+						$data['activation_period'] = $this->config->item('email_activation_expire', 'croomy_auth') / 3600;
 
 						$this->_send_email('activate', $data['email'], $data);
 
@@ -184,7 +184,7 @@ class Auth extends CI_Controller
 						$this->_show_message($this->lang->line('auth_message_registration_completed_1'));
 
 					} else {
-						if ($this->config->item('email_account_details', 'Croomy_auth')) {	// send "welcome" email
+						if ($this->config->item('email_account_details', 'croomy_auth')) {	// send "welcome" email
 
 							$this->_send_email('welcome', $data['email'], $data);
 						}
@@ -193,7 +193,7 @@ class Auth extends CI_Controller
 						$this->_show_message($this->lang->line('auth_message_registration_completed_2').' '.anchor('/auth/login/', 'Login'));
 					}
 				} else {
-					$errors = $this->Croomy_auth->get_error_message();
+					$errors = $this->croomy_auth->get_error_message();
 					foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 				}
 			}
@@ -207,7 +207,7 @@ class Auth extends CI_Controller
 			$data['use_username'] = $use_username;
 			$data['captcha_registration'] = $captcha_registration;
 			$data['use_recaptcha'] = $use_recaptcha;
-			$data['additional_fields'] = $this->config->item('additional_reg_fields', 'Croomy_auth');
+			$data['additional_fields'] = $this->config->item('additional_reg_fields', 'croomy_auth');
 			$this->load->view('Croomy_auth/register_form', $data);
 		}
 	}
@@ -219,7 +219,7 @@ class Auth extends CI_Controller
 	 */
 	function send_again()
 	{
-		if (!$this->Croomy_auth->is_logged_in(FALSE)) {							// not logged in or activated
+		if (!$this->croomy_auth->is_logged_in(FALSE)) {							// not logged in or activated
 			redirect('/auth/login/');
 
 		} else {
@@ -228,18 +228,18 @@ class Auth extends CI_Controller
 			$data['errors'] = array();
 
 			if ($this->form_validation->run()) {								// validation ok
-				if (!is_null($data = $this->Croomy_auth->change_email(
+				if (!is_null($data = $this->croomy_auth->change_email(
 						$this->form_validation->set_value('email')))) {			// success
 
-					$data['site_name']	= $this->config->item('website_name', 'Croomy_auth');
-					$data['activation_period'] = $this->config->item('email_activation_expire', 'Croomy_auth') / 3600;
+					$data['site_name']	= $this->config->item('website_name', 'croomy_auth');
+					$data['activation_period'] = $this->config->item('email_activation_expire', 'croomy_auth') / 3600;
 
 					$this->_send_email('activate', $data['email'], $data);
 
 					$this->_show_message(sprintf($this->lang->line('auth_message_activation_email_sent'), $data['email']));
 
 				} else {
-					$errors = $this->Croomy_auth->get_error_message();
+					$errors = $this->croomy_auth->get_error_message();
 					foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 				}
 			}
@@ -260,8 +260,8 @@ class Auth extends CI_Controller
 		$new_email_key	= $this->uri->segment(4);
 
 		// Activate user
-		if ($this->Croomy_auth->activate_user($user_id, $new_email_key)) {		// success
-			$this->Croomy_auth->logout();
+		if ($this->croomy_auth->activate_user($user_id, $new_email_key)) {		// success
+			$this->croomy_auth->logout();
 			$this->_show_message($this->lang->line('auth_message_activation_completed').' '.anchor('/auth/login/', 'Login'));
 
 		} else {																// fail
@@ -276,7 +276,7 @@ class Auth extends CI_Controller
 	 */
 	function admin_approve() {
 		$admin_key = $this->uri->segment(3);
-		if ($this->Croomy_auth->approve($admin_key)) {
+		if ($this->croomy_auth->approve($admin_key)) {
 			echo 'User successfully activated!';
 		}
 		else {
@@ -285,7 +285,7 @@ class Auth extends CI_Controller
 	}
 				function admin_deny() {
 								$admin_key = $this->uri->segment(3);
-								if ($this->Croomy_auth->deny($admin_key)) {
+								if ($this->croomy_auth->deny($admin_key)) {
 												echo 'User successfully denied (banned).';
 								}
 								else {
@@ -300,10 +300,10 @@ class Auth extends CI_Controller
 	 */
 	function forgot_password()
 	{
-		if ($this->Croomy_auth->is_logged_in()) {									// logged in
+		if ($this->croomy_auth->is_logged_in()) {									// logged in
 			redirect('');
 
-		} elseif ($this->Croomy_auth->is_logged_in(FALSE)) {						// logged in, not activated
+		} elseif ($this->croomy_auth->is_logged_in(FALSE)) {						// logged in, not activated
 			redirect('/auth/send_again/');
 
 		} else {
@@ -312,10 +312,10 @@ class Auth extends CI_Controller
 			$data['errors'] = array();
 
 			if ($this->form_validation->run()) {								// validation ok
-				if (!is_null($data = $this->Croomy_auth->forgot_password(
+				if (!is_null($data = $this->croomy_auth->forgot_password(
 						$this->form_validation->set_value('login')))) {
 
-					$data['site_name'] = $this->config->item('website_name', 'Croomy_auth');
+					$data['site_name'] = $this->config->item('website_name', 'croomy_auth');
 
 					// Send email with password activation link
 					$this->_send_email('forgot_password', $data['email'], $data);
@@ -323,7 +323,7 @@ class Auth extends CI_Controller
 					$this->_show_message($this->lang->line('auth_message_new_password_sent'));
 
 				} else {
-					$errors = $this->Croomy_auth->get_error_message();
+					$errors = $this->croomy_auth->get_error_message();
 					foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 				}
 			}
@@ -343,17 +343,17 @@ class Auth extends CI_Controller
 		$user_id		= $this->uri->segment(3);
 		$new_pass_key	= $this->uri->segment(4);
 
-		$this->form_validation->set_rules('new_password', 'New Password', 'trim|required|xss_clean|min_length['.$this->config->item('password_min_length', 'Croomy_auth').']|max_length['.$this->config->item('password_max_length', 'tank_auth').']|alpha_dash');
+		$this->form_validation->set_rules('new_password', 'New Password', 'trim|required|xss_clean|min_length['.$this->config->item('password_min_length', 'croomy_auth').']|max_length['.$this->config->item('password_max_length', 'tank_auth').']|alpha_dash');
 		$this->form_validation->set_rules('confirm_new_password', 'Confirm new Password', 'trim|required|xss_clean|matches[new_password]');
 
 		$data['errors'] = array();
 
 		if ($this->form_validation->run()) {								// validation ok
-			if (!is_null($data = $this->Croomy_auth->reset_password(
+			if (!is_null($data = $this->croomy_auth->reset_password(
 					$user_id, $new_pass_key,
 					$this->form_validation->set_value('new_password')))) {	// success
 
-				$data['site_name'] = $this->config->item('website_name', 'Croomy_auth');
+				$data['site_name'] = $this->config->item('website_name', 'croomy_auth');
 
 				// Send email with new password
 				$this->_send_email('reset_password', $data['email'], $data);
@@ -365,11 +365,11 @@ class Auth extends CI_Controller
 			}
 		} else {
 			// Try to activate user by password key (if not activated yet)
-			if ($this->config->item('email_activation', 'Croomy_auth')) {
-				$this->Croomy_auth->activate_user($user_id, $new_pass_key, FALSE);
+			if ($this->config->item('email_activation', 'croomy_auth')) {
+				$this->croomy_auth->activate_user($user_id, $new_pass_key, FALSE);
 			}
 
-			if (!$this->Croomy_auth->can_reset_password($user_id, $new_pass_key)) {
+			if (!$this->croomy_auth->can_reset_password($user_id, $new_pass_key)) {
 				$this->_show_message($this->lang->line('auth_message_new_password_failed'));
 			}
 		}
@@ -383,24 +383,24 @@ class Auth extends CI_Controller
 	 */
 	function change_password()
 	{
-		if (!$this->Croomy_auth->is_logged_in()) {								// not logged in or not activated
+		if (!$this->croomy_auth->is_logged_in()) {								// not logged in or not activated
 			redirect('/auth/login/');
 
 		} else {
 			$this->form_validation->set_rules('old_password', 'Old Password', 'trim|required|xss_clean');
-			$this->form_validation->set_rules('new_password', 'New Password', 'trim|required|xss_clean|min_length['.$this->config->item('password_min_length', 'Croomy_auth').']|max_length['.$this->config->item('password_max_length', 'tank_auth').']|alpha_dash');
+			$this->form_validation->set_rules('new_password', 'New Password', 'trim|required|xss_clean|min_length['.$this->config->item('password_min_length', 'croomy_auth').']|max_length['.$this->config->item('password_max_length', 'tank_auth').']|alpha_dash');
 			$this->form_validation->set_rules('confirm_new_password', 'Confirm new Password', 'trim|required|xss_clean|matches[new_password]');
 
 			$data['errors'] = array();
 
 			if ($this->form_validation->run()) {								// validation ok
-				if ($this->Croomy_auth->change_password(
+				if ($this->croomy_auth->change_password(
 						$this->form_validation->set_value('old_password'),
 						$this->form_validation->set_value('new_password'))) {	// success
 					$this->_show_message($this->lang->line('auth_message_password_changed'));
 
 				} else {														// fail
-					$errors = $this->Croomy_auth->get_error_message();
+					$errors = $this->croomy_auth->get_error_message();
 					foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 				}
 			}
@@ -415,7 +415,7 @@ class Auth extends CI_Controller
 	 */
 	function change_email()
 	{
-		if (!$this->Croomy_auth->is_logged_in()) {								// not logged in or not activated
+		if (!$this->croomy_auth->is_logged_in()) {								// not logged in or not activated
 			redirect('/auth/login/');
 
 		} else {
@@ -425,11 +425,11 @@ class Auth extends CI_Controller
 			$data['errors'] = array();
 
 			if ($this->form_validation->run()) {								// validation ok
-				if (!is_null($data = $this->Croomy_auth->set_new_email(
+				if (!is_null($data = $this->croomy_auth->set_new_email(
 						$this->form_validation->set_value('email'),
 						$this->form_validation->set_value('password')))) {			// success
 
-					$data['site_name'] = $this->config->item('website_name', 'Croomy_auth');
+					$data['site_name'] = $this->config->item('website_name', 'croomy_auth');
 
 					// Send email with new email address and its activation link
 					$this->_send_email('change_email', $data['new_email'], $data);
@@ -437,7 +437,7 @@ class Auth extends CI_Controller
 					$this->_show_message(sprintf($this->lang->line('auth_message_new_email_sent'), $data['new_email']));
 
 				} else {
-					$errors = $this->Croomy_auth->get_error_message();
+					$errors = $this->croomy_auth->get_error_message();
 					foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 				}
 			}
@@ -458,8 +458,8 @@ class Auth extends CI_Controller
 		$new_email_key	= $this->uri->segment(4);
 
 		// Reset email
-		if ($this->Croomy_auth->activate_new_email($user_id, $new_email_key)) {	// success
-			$this->Croomy_auth->logout();
+		if ($this->croomy_auth->activate_new_email($user_id, $new_email_key)) {	// success
+			$this->croomy_auth->logout();
 			$this->_show_message($this->lang->line('auth_message_new_email_activated').' '.anchor('/auth/login/', 'Login'));
 
 		} else {																// fail
@@ -474,7 +474,7 @@ class Auth extends CI_Controller
 	 */
 	function unregister()
 	{
-		if (!$this->Croomy_auth->is_logged_in()) {								// not logged in or not activated
+		if (!$this->croomy_auth->is_logged_in()) {								// not logged in or not activated
 			redirect('/auth/login/');
 
 		} else {
@@ -483,12 +483,12 @@ class Auth extends CI_Controller
 			$data['errors'] = array();
 
 			if ($this->form_validation->run()) {								// validation ok
-				if ($this->Croomy_auth->delete_user(
+				if ($this->croomy_auth->delete_user(
 						$this->form_validation->set_value('password'))) {		// success
 					$this->_show_message($this->lang->line('auth_message_unregistered'));
 
 				} else {														// fail
-					$errors = $this->Croomy_auth->get_error_message();
+					$errors = $this->croomy_auth->get_error_message();
 					foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 				}
 			}
@@ -519,10 +519,10 @@ class Auth extends CI_Controller
 	function _send_email($type, $email, &$data)
 	{
 		$this->load->library('email');
-		$this->email->from($this->config->item('webmaster_email', 'Croomy_auth'), $this->config->item('website_name', 'tank_auth'));
-		$this->email->reply_to($this->config->item('webmaster_email', 'Croomy_auth'), $this->config->item('website_name', 'tank_auth'));
+		$this->email->from($this->config->item('webmaster_email', 'croomy_auth'), $this->config->item('website_name', 'tank_auth'));
+		$this->email->reply_to($this->config->item('webmaster_email', 'croomy_auth'), $this->config->item('website_name', 'tank_auth'));
 		$this->email->to($email);
-		$this->email->subject(sprintf($this->lang->line('auth_subject_'.$type), $this->config->item('website_name', 'Croomy_auth')));
+		$this->email->subject(sprintf($this->lang->line('auth_subject_'.$type), $this->config->item('website_name', 'croomy_auth')));
 		$this->email->message($this->load->view('email/'.$type.'-html', $data, TRUE));
 		$this->email->set_alt_message($this->load->view('email/'.$type.'-txt', $data, TRUE));
 		$this->email->send();
@@ -538,14 +538,14 @@ class Auth extends CI_Controller
 		$this->load->helper('captcha');
 
 		$cap = create_captcha(array(
-			'img_path'		=> './'.$this->config->item('captcha_path', 'Croomy_auth'),
-			'img_url'		=> base_url().$this->config->item('captcha_path', 'Croomy_auth'),
-			'font_path'		=> './'.$this->config->item('captcha_fonts_path', 'Croomy_auth'),
-			'font_size'		=> $this->config->item('captcha_font_size', 'Croomy_auth'),
-			'img_width'		=> $this->config->item('captcha_width', 'Croomy_auth'),
-			'img_height'	=> $this->config->item('captcha_height', 'Croomy_auth'),
-			'show_grid'		=> $this->config->item('captcha_grid', 'Croomy_auth'),
-			'expiration'	=> $this->config->item('captcha_expire', 'Croomy_auth'),
+			'img_path'		=> './'.$this->config->item('captcha_path', 'croomy_auth'),
+			'img_url'		=> base_url().$this->config->item('captcha_path', 'croomy_auth'),
+			'font_path'		=> './'.$this->config->item('captcha_fonts_path', 'croomy_auth'),
+			'font_size'		=> $this->config->item('captcha_font_size', 'croomy_auth'),
+			'img_width'		=> $this->config->item('captcha_width', 'croomy_auth'),
+			'img_height'	=> $this->config->item('captcha_height', 'croomy_auth'),
+			'show_grid'		=> $this->config->item('captcha_grid', 'croomy_auth'),
+			'expiration'	=> $this->config->item('captcha_expire', 'croomy_auth'),
 		));
 
 		// Save captcha params in session
@@ -571,11 +571,11 @@ class Auth extends CI_Controller
 		list($usec, $sec) = explode(" ", microtime());
 		$now = ((float)$usec + (float)$sec);
 
-		if ($now - $time > $this->config->item('captcha_expire', 'Croomy_auth')) {
+		if ($now - $time > $this->config->item('captcha_expire', 'croomy_auth')) {
 			$this->form_validation->set_message('_check_captcha', $this->lang->line('auth_captcha_expired'));
 			return FALSE;
 
-		} elseif (($this->config->item('captcha_case_sensitive', 'Croomy_auth') AND
+		} elseif (($this->config->item('captcha_case_sensitive', 'croomy_auth') AND
 				$code != $word) OR
 				strtolower($code) != strtolower($word)) {
 			$this->form_validation->set_message('_check_captcha', $this->lang->line('auth_incorrect_captcha'));
@@ -597,7 +597,7 @@ class Auth extends CI_Controller
 		$options = "<script>var RecaptchaOptions = {theme: 'custom', custom_theme_widget: 'recaptcha_widget'};</script>\n";
 
 		// Get reCAPTCHA JS and non-JS HTML
-		$html = recaptcha_get_html($this->config->item('recaptcha_public_key', 'Croomy_auth'));
+		$html = recaptcha_get_html($this->config->item('recaptcha_public_key', 'croomy_auth'));
 
 		return $options.$html;
 	}
@@ -611,7 +611,7 @@ class Auth extends CI_Controller
 	{
 		$this->load->helper('recaptcha');
 
-		$resp = recaptcha_check_answer($this->config->item('recaptcha_private_key', 'Croomy_auth'),
+		$resp = recaptcha_check_answer($this->config->item('recaptcha_private_key', 'croomy_auth'),
 				$_SERVER['REMOTE_ADDR'],
 				$_POST['recaptcha_challenge_field'],
 				$_POST['recaptcha_response_field']);
@@ -627,7 +627,7 @@ class Auth extends CI_Controller
 	 * is_logged_in() function for AJAX requests
 	 */
 	function is_logged() {
-		echo $this->Croomy_auth->is_logged_in();
+		echo $this->croomy_auth->is_logged_in();
 	}
 }
 

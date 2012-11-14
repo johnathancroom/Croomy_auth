@@ -2,13 +2,13 @@
 $new_password = array(
 	'name'	=> 'new_password',
 	'id'	=> 'new_password',
-	'maxlength'	=> $this->config->item('password_max_length', 'tank_auth'),
+	'maxlength'	=> $this->config->item('password_max_length', 'croomy_auth'),
 	'size'	=> 30,
 );
 $confirm_new_password = array(
 	'name'	=> 'confirm_new_password',
 	'id'	=> 'confirm_new_password',
-	'maxlength'	=> $this->config->item('password_max_length', 'tank_auth'),
+	'maxlength'	=> $this->config->item('password_max_length', 'croomy_auth'),
 	'size' 	=> 30,
 );
 ?>

@@ -4,7 +4,7 @@ if ($use_username) {
 		'name'	=> 'username',
 		'id'	=> 'username',
 		'value' => set_value('username'),
-		'maxlength'	=> $this->config->item('username_max_length', 'tank_auth'),
+		'maxlength'	=> $this->config->item('username_max_length', 'croomy_auth'),
 		'size'	=> 30,
 	);
 }
@@ -19,14 +19,14 @@ $password = array(
 	'name'	=> 'password',
 	'id'	=> 'password',
 	'value' => set_value('password'),
-	'maxlength'	=> $this->config->item('password_max_length', 'tank_auth'),
+	'maxlength'	=> $this->config->item('password_max_length', 'croomy_auth'),
 	'size'	=> 30,
 );
 $confirm_password = array(
 	'name'	=> 'confirm_password',
 	'id'	=> 'confirm_password',
 	'value' => set_value('confirm_password'),
-	'maxlength'	=> $this->config->item('password_max_length', 'tank_auth'),
+	'maxlength'	=> $this->config->item('password_max_length', 'croomy_auth'),
 	'size'	=> 30,
 );
 $captcha = array(
