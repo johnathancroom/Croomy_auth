@@ -4,17 +4,17 @@ define('STATUS_ACTIVATED', '1');
 define('STATUS_NOT_ACTIVATED', '0');
 
 /**
- * Tank_auth
+ * Croomy_auth
  *
  * Authentication library for Code Igniter.
  *
- * @package		Tank_auth
+ * @package		Croomy_auth
  * @author		Ilya Konyukhov (http://konyukhov.com/soft/)
  * @version		1.0.9
  * @based on	DX Auth by Dexcell (http://dexcell.shinsengumiteam.com/dx_auth)
  * @license		MIT License Copyright (c) 2008 Erick Hartanto
  */
-class Tank_auth
+class Croomy_auth
 {
 	private $error = array();
 
@@ -22,11 +22,11 @@ class Tank_auth
 	{
 		$this->ci =& get_instance();
 
-		$this->ci->load->config('tank_auth', TRUE);
+		$this->ci->load->config('croomy_auth', TRUE);
 
 		$this->ci->load->library('session');
 		$this->ci->load->database();
-		$this->ci->load->model('tank_auth/users');
+		$this->ci->load->model('croomy_auth/users');
 
 		// Try to autologin
 		$this->autologin();
@@ -86,8 +86,8 @@ class Tank_auth
 
 							$this->ci->users->update_login_info(
 									$user->id,
-									$this->ci->config->item('login_record_ip', 'tank_auth'),
-									$this->ci->config->item('login_record_time', 'tank_auth'));
+									$this->ci->config->item('login_record_ip', 'croomy_auth'),
+									$this->ci->config->item('login_record_time', 'croomy_auth'));
 							return TRUE;
 						}
 					}
@@ -194,7 +194,7 @@ class Tank_auth
 		} else {
 			$salt = bin2hex(openssl_random_pseudo_bytes(10));
 			$hashed_password = openssl_digest($salt . $password, 'sha512');
-			$additional_fields = $this->ci->config->item('additional_reg_fields', 'tank_auth');
+			$additional_fields = $this->ci->config->item('additional_reg_fields', 'croomy_auth');
 			
 			$data = array(
 				'username'	=> $username,
@@ -313,7 +313,7 @@ class Tank_auth
 	 */
 	function activate_user($user_id, $activation_key, $activate_by_email = TRUE)
 	{
-		$this->ci->users->purge_na($this->ci->config->item('email_activation_expire', 'tank_auth'));
+		$this->ci->users->purge_na($this->ci->config->item('email_activation_expire', 'croomy_auth'));
 
 		if ((strlen($user_id) > 0) AND (strlen($activation_key) > 0)) {
 			return $this->ci->users->activate_user($user_id, $activation_key, $activate_by_email);
@@ -364,7 +364,7 @@ class Tank_auth
 			return $this->ci->users->can_reset_password(
 				$user_id,
 				$new_pass_key,
-				$this->ci->config->item('forgot_password_expire', 'tank_auth'));
+				$this->ci->config->item('forgot_password_expire', 'croomy_auth'));
 		}
 		return FALSE;
 	}
@@ -385,18 +385,18 @@ class Tank_auth
 
 				// Hash password using phpass
 				$hasher = new PasswordHash(
-						$this->ci->config->item('phpass_hash_strength', 'tank_auth'),
-						$this->ci->config->item('phpass_hash_portable', 'tank_auth'));
+						$this->ci->config->item('phpass_hash_strength', 'croomy_auth'),
+						$this->ci->config->item('phpass_hash_portable', 'croomy_auth'));
 				$hashed_password = $hasher->HashPassword($new_password);
 
 				if ($this->ci->users->reset_password(
 						$user_id,
 						$hashed_password,
 						$new_pass_key,
-						$this->ci->config->item('forgot_password_expire', 'tank_auth'))) {	// success
+						$this->ci->config->item('forgot_password_expire', 'croomy_auth'))) {	// success
 
 					// Clear all user's autologins
-					$this->ci->load->model('tank_auth/user_autologin');
+					$this->ci->load->model('croomy_auth/user_autologin');
 					$this->ci->user_autologin->clear($user->id);
 
 					return array(
@@ -426,8 +426,8 @@ class Tank_auth
 
 			// Check if old password correct
 			$hasher = new PasswordHash(
-					$this->ci->config->item('phpass_hash_strength', 'tank_auth'),
-					$this->ci->config->item('phpass_hash_portable', 'tank_auth'));
+					$this->ci->config->item('phpass_hash_strength', 'croomy_auth'),
+					$this->ci->config->item('phpass_hash_portable', 'croomy_auth'));
 			if ($hasher->CheckPassword($old_pass, $user->password)) {			// success
 
 				// Hash new password using phpass
@@ -461,8 +461,8 @@ class Tank_auth
 
 			// Check if password correct
 			$hasher = new PasswordHash(
-					$this->ci->config->item('phpass_hash_strength', 'tank_auth'),
-					$this->ci->config->item('phpass_hash_portable', 'tank_auth'));
+					$this->ci->config->item('phpass_hash_strength', 'croomy_auth'),
+					$this->ci->config->item('phpass_hash_portable', 'croomy_auth'));
 			if ($hasher->CheckPassword($password, $user->password)) {			// success
 
 				$data = array(
@@ -554,8 +554,8 @@ class Tank_auth
 
 			// Check if password correct
 			$hasher = new PasswordHash(
-					$this->ci->config->item('phpass_hash_strength', 'tank_auth'),
-					$this->ci->config->item('phpass_hash_portable', 'tank_auth'));
+					$this->ci->config->item('phpass_hash_strength', 'croomy_auth'),
+					$this->ci->config->item('phpass_hash_portable', 'croomy_auth'));
 			if ($hasher->CheckPassword($password, $user->password)) {			// success
 
 				$this->ci->users->delete_user($user_id);
@@ -591,14 +591,14 @@ class Tank_auth
 		$this->ci->load->helper('cookie');
 		$key = substr(md5(uniqid(rand().get_cookie($this->ci->config->item('sess_cookie_name')))), 0, 16);
 
-		$this->ci->load->model('tank_auth/user_autologin');
+		$this->ci->load->model('croomy_auth/user_autologin');
 		$this->ci->user_autologin->purge($user_id);
 
 		if ($this->ci->user_autologin->set($user_id, md5($key))) {
 			set_cookie(array(
-					'name' 		=> $this->ci->config->item('autologin_cookie_name', 'tank_auth'),
+					'name' 		=> $this->ci->config->item('autologin_cookie_name', 'croomy_auth'),
 					'value'		=> serialize(array('user_id' => $user_id, 'key' => $key)),
-					'expire'	=> $this->ci->config->item('autologin_cookie_life', 'tank_auth'),
+					'expire'	=> $this->ci->config->item('autologin_cookie_life', 'croomy_auth'),
 			));
 			return TRUE;
 		}
@@ -613,14 +613,14 @@ class Tank_auth
 	private function delete_autologin()
 	{
 		$this->ci->load->helper('cookie');
-		if ($cookie = get_cookie($this->ci->config->item('autologin_cookie_name', 'tank_auth'), TRUE)) {
+		if ($cookie = get_cookie($this->ci->config->item('autologin_cookie_name', 'croomy_auth'), TRUE)) {
 
 			$data = unserialize($cookie);
 
-			$this->ci->load->model('tank_auth/user_autologin');
+			$this->ci->load->model('croomy_auth/user_autologin');
 			$this->ci->user_autologin->delete($data['user_id'], md5($data['key']));
 
-			delete_cookie($this->ci->config->item('autologin_cookie_name', 'tank_auth'));
+			delete_cookie($this->ci->config->item('autologin_cookie_name', 'croomy_auth'));
 		}
 	}
 
@@ -634,13 +634,13 @@ class Tank_auth
 		if (!$this->is_logged_in() AND !$this->is_logged_in(FALSE)) {			// not logged in (as any user)
 
 			$this->ci->load->helper('cookie');
-			if ($cookie = get_cookie($this->ci->config->item('autologin_cookie_name', 'tank_auth'), TRUE)) {
+			if ($cookie = get_cookie($this->ci->config->item('autologin_cookie_name', 'croomy_auth'), TRUE)) {
 
 				$data = unserialize($cookie);
 
 				if (isset($data['key']) AND isset($data['user_id'])) {
 
-					$this->ci->load->model('tank_auth/user_autologin');
+					$this->ci->load->model('croomy_auth/user_autologin');
 					if (!is_null($user = $this->ci->user_autologin->get($data['user_id'], md5($data['key'])))) {
 
 						// Login user
@@ -652,15 +652,15 @@ class Tank_auth
 
 						// Renew users cookie to prevent it from expiring
 						set_cookie(array(
-								'name' 		=> $this->ci->config->item('autologin_cookie_name', 'tank_auth'),
+								'name' 		=> $this->ci->config->item('autologin_cookie_name', 'croomy_auth'),
 								'value'		=> $cookie,
-								'expire'	=> $this->ci->config->item('autologin_cookie_life', 'tank_auth'),
+								'expire'	=> $this->ci->config->item('autologin_cookie_life', 'croomy_auth'),
 						));
 
 						$this->ci->users->update_login_info(
 								$user->id,
-								$this->ci->config->item('login_record_ip', 'tank_auth'),
-								$this->ci->config->item('login_record_time', 'tank_auth'));
+								$this->ci->config->item('login_record_ip', 'croomy_auth'),
+								$this->ci->config->item('login_record_time', 'croomy_auth'));
 						return TRUE;
 					}
 				}
@@ -677,10 +677,10 @@ class Tank_auth
 	 */
 	function is_max_login_attempts_exceeded($login)
 	{
-		if ($this->ci->config->item('login_count_attempts', 'tank_auth')) {
-			$this->ci->load->model('tank_auth/login_attempts');
+		if ($this->ci->config->item('login_count_attempts', 'croomy_auth')) {
+			$this->ci->load->model('croomy_auth/login_attempts');
 			return $this->ci->login_attempts->get_attempts_num($this->ci->input->ip_address(), $login)
-					>= $this->ci->config->item('login_max_attempts', 'tank_auth');
+					>= $this->ci->config->item('login_max_attempts', 'croomy_auth');
 		}
 		return FALSE;
 	}
@@ -694,9 +694,9 @@ class Tank_auth
 	 */
 	private function increase_login_attempt($login)
 	{
-		if ($this->ci->config->item('login_count_attempts', 'tank_auth')) {
+		if ($this->ci->config->item('login_count_attempts', 'croomy_auth')) {
 			if (!$this->is_max_login_attempts_exceeded($login)) {
-				$this->ci->load->model('tank_auth/login_attempts');
+				$this->ci->load->model('croomy_auth/login_attempts');
 				$this->ci->login_attempts->increase_attempt($this->ci->input->ip_address(), $login);
 			}
 		}
@@ -711,15 +711,15 @@ class Tank_auth
 	 */
 	private function clear_login_attempts($login)
 	{
-		if ($this->ci->config->item('login_count_attempts', 'tank_auth')) {
-			$this->ci->load->model('tank_auth/login_attempts');
+		if ($this->ci->config->item('login_count_attempts', 'croomy_auth')) {
+			$this->ci->load->model('croomy_auth/login_attempts');
 			$this->ci->login_attempts->clear_attempts(
 					$this->ci->input->ip_address(),
 					$login,
-					$this->ci->config->item('login_attempt_expire', 'tank_auth'));
+					$this->ci->config->item('login_attempt_expire', 'croomy_auth'));
 		}
 	}
 }
 
-/* End of file Tank_auth.php */
-/* Location: ./application/libraries/Tank_auth.php */
+/* End of file Croomy_auth.php */
+/* Location: ./application/libraries/Croomy_auth.php */

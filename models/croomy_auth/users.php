@@ -6,7 +6,7 @@
  * This model represents user authentication data. It operates the following tables:
  * - user account data,
  *
- * @package	Tank_auth
+ * @package	Croomy_auth
  * @author	Ilya Konyukhov (http://konyukhov.com/soft/)
  */
 class Users extends CI_Model
@@ -19,7 +19,7 @@ class Users extends CI_Model
 		parent::__construct();
 
 		$ci =& get_instance();
-		$this->table_name			= $ci->config->item('db_table_prefix', 'tank_auth').$this->table_name;
+		$this->table_name			= $ci->config->item('db_table_prefix', 'croomy_auth').$this->table_name;
 	}
 
 	/**
@@ -160,7 +160,7 @@ class Users extends CI_Model
 			$data[$line['table']][$line['key']] = $line['value'];
 		}
 		foreach ($data as $k => $v) {
-			$user_val = $this->config->item('table_settings', 'tank_auth');
+			$user_val = $this->config->item('table_settings', 'croomy_auth');
 			if (isset($user_val[$k])) {
 				$user_col = $user_val[$k];
 			}

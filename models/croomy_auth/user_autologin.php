@@ -6,7 +6,7 @@
  * This model represents user autologin data. It can be used
  * for user verification when user claims his autologin passport.
  *
- * @package	Tank_auth
+ * @package	Croomy_auth
  * @author	Ilya Konyukhov (http://konyukhov.com/soft/)
  */
 class User_Autologin extends CI_Model
@@ -19,8 +19,8 @@ class User_Autologin extends CI_Model
 		parent::__construct();
 
 		$ci =& get_instance();
-		$this->table_name		= $ci->config->item('db_table_prefix', 'tank_auth').$this->table_name;
-		$this->users_table_name	= $ci->config->item('db_table_prefix', 'tank_auth').$this->users_table_name;
+		$this->table_name		= $ci->config->item('db_table_prefix', 'croomy_auth').$this->table_name;
+		$this->users_table_name	= $ci->config->item('db_table_prefix', 'croomy_auth').$this->users_table_name;
 	}
 
 	/**

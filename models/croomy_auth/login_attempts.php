@@ -6,7 +6,7 @@
  * This model serves to watch on all attempts to login on the site
  * (to protect the site from brute-force attack to user database)
  *
- * @package	Tank_auth
+ * @package	Croomy_auth
  * @author	Ilya Konyukhov (http://konyukhov.com/soft/)
  */
 class Login_attempts extends CI_Model
@@ -18,7 +18,7 @@ class Login_attempts extends CI_Model
 		parent::__construct();
 
 		$ci =& get_instance();
-		$this->table_name = $ci->config->item('db_table_prefix', 'tank_auth').$this->table_name;
+		$this->table_name = $ci->config->item('db_table_prefix', 'croomy_auth').$this->table_name;
 	}
 
 	/**
