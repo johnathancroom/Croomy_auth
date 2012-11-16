@@ -73,7 +73,7 @@ class Croomy_auth
 						if (!$user->activated) {							// fail - not activated
 							$this->error = array('not_activated' => '');
 
-						} 
+						}
 						elseif (!$user->approved) {
 							$this->error = array('not_approved' => '');
 						}
@@ -128,7 +128,7 @@ class Croomy_auth
 	{
 		return $this->ci->session->userdata('status') === ($activated ? STATUS_ACTIVATED : STATUS_NOT_ACTIVATED);
 	}
-	
+
 	function is_approved() {
 		return $this->ci->session->userdata('approved');
 	}
@@ -162,7 +162,7 @@ class Croomy_auth
 	{
 		return $this->ci->users->get_user_by_id($this->get_user_id(), TRUE);
 	}
-	
+
 	/**
 	* Get user array
 	*
@@ -195,7 +195,7 @@ class Croomy_auth
 			$salt = bin2hex(openssl_random_pseudo_bytes(10));
 			$hashed_password = openssl_digest($salt . $password, 'sha512');
 			$additional_fields = $this->ci->config->item('additional_reg_fields', 'croomy_auth');
-			
+
 			$data = array(
 				'username'	=> $username,
 				'password'	=> $hashed_password,
@@ -528,17 +528,17 @@ class Croomy_auth
 		}
 	}
 
-        function deny($admin_key) {
-                $query = $this->ci->db->where('admin_key', $admin_key)->get('users');
-                if ($query->num_rows() == 0) {
-                        return False;
-                }
-                else {
-                        $this->ci->db->where('admin_key', $admin_key);
-                        $this->ci->db->update('users', array('banned' => 1, 'approved' => 0, 'activated' => 0, 'admin_key' => ''));
-                        return True;
-                }
-        }
+	function deny($admin_key) {
+		$query = $this->ci->db->where('admin_key', $admin_key)->get('users');
+		if ($query->num_rows() == 0) {
+			return False;
+		}
+		else {
+			$this->ci->db->where('admin_key', $admin_key);
+			$this->ci->db->update('users', array('banned' => 1, 'approved' => 0, 'activated' => 0, 'admin_key' => ''));
+			return True;
+		}
+	}
 
 	/**
 	 * Delete user from the site (only when user is logged in)
