@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+<script language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script language="javascript" src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.0/js/bootstrap.min.js"></script>
         <style type="text/css">
             body {
                 padding-top: 40px;
@@ -17,7 +19,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">Project name</a>
+          <a class="brand" href="#"><?php echo $this->config->item('website_name', 'croomy_auth'); ?> Admin</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class="active"><?php echo anchor('admin/', 'Home'); ?></li>
