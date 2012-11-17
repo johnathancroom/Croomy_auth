@@ -70,6 +70,9 @@ class Auth extends CI_Controller
 						$this->form_validation->set_value('remember'),
 						$data['login_by_username'],
 						$data['login_by_email'])) {								// success
+					if ($this->croomy_auth->get_user_id() == $this->config->item('admin_user', 'croomy_auth')) {
+						redirect('admin/');
+					}
 					redirect('');
 
 				} else {
