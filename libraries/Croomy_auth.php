@@ -154,24 +154,49 @@ class Croomy_auth
 	}
 
 	/**
-	* Get user object
-	*
-	* @return object
-	*/
+	 * Get user object
+	 *
+	 * @return	object
+	 */
 	function get_user()
 	{
 		return $this->ci->users->get_user_by_id($this->get_user_id(), TRUE);
 	}
 	
 	/**
-	* Get user array
-	*
-	* @return array
-	*/
+	 * Get user array
+	 *
+	 * @return	array
+	 */
 	function get_user_array()
 	{
 		return $this->ci->users->get_user_by_id($this->get_user_id(), TRUE, TRUE);
 	}
+
+	/**
+	 * Get the values of additional registration fields. Automatically finds the user_id column as
+	 * specified in config/croomy_auth.php
+	 *
+	 * @param	string
+	 * @return	string
+	 */
+	function get_user_field($field) {
+		foreach $this->ci->config->item('additional_reg_fields', 'croomy_auth') as $line) {
+			if ($line['name'] == $field) {
+				$array = explode('.', $field['database_column']);
+			}
+		}
+		$rules = $this->ci->config->item('table_settings', 'croomy_auth');
+		if (!isset($rules[$array[0]])) {
+			$col = 'user_id';
+		}
+		else {
+			$col = $rules[$array[0]];
+		}	
+		$this->ci->db->select($array[1]);
+		$this->ci->db->where($col, $this->get_user());
+		return $this->ci->db->get($array[0])->row()->$array[1];
+	} 
 
 	/**
 	 * Create new user on the site and return some data about it:
