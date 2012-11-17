@@ -36,5 +36,5 @@ $lang['auth_subject_reset_password'] = 'Your new password on %s';
 $lang['auth_subject_change_email'] = 'Your new email address on %s';
 $lang['auth_subject_admin-approve'] = 'New user on %s';
 
-/* End of file tank_auth_lang.php */
-/* Location: ./application/language/english/tank_auth_lang.php */
+/* End of file croomy_auth_lang.php */
+/* Location: ./application/language/english/croomy_auth_lang.php */

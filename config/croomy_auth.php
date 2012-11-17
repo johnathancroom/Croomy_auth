@@ -7,8 +7,8 @@
 | These details are used in emails sent by authentication library.
 |--------------------------------------------------------------------------
 */
-$config['website_name'] = 'XLREader test';
-$config['webmaster_email'] = 'david@delcoe.com';
+$config['website_name'] = 'Website';
+$config['webmaster_email'] = 'your@email.com';
 
 /*
 |--------------------------------------------------------------------------
@@ -81,8 +81,8 @@ $config['login_attempt_expire'] = 60*60*24;
 |
 | Additional registration fields can be specified using an array. They will be
 | added to the registration form and inputted into either the `users` table
-| or into another user-specified table. 
-| 
+| or into another user-specified table.
+|
 | Arrays should use the following convention:
 | $config['additional_reg_fields'] = array(
 |    array(
@@ -94,13 +94,13 @@ $config['login_attempt_expire'] = 60*60*24;
 |				 	    # if checkbox, radio, or dropdown, an input_options array is
 |					    # required with keys and values for the options
 |	'input_options' 	 => 'class="input-class" id="input-id"',
-|		
+|
 |    ),
-| );  
-| 
+| );
+|
 | As for the $config['table_settings'] value, you must set the column that will contain the newly-generated
 | user id. If a column for a particular table is not set, then it will default to 'user_id'.
-| 
+|
 | Using the previous field as an example, if you wanted the newly-generated user ID to go into the 'user'
 | column of the `my_table` table, you could set the directive like this:
 | $config['table_settings'] = array(
@@ -109,16 +109,8 @@ $config['login_attempt_expire'] = 60*60*24;
 |
 |--------------------------------------------------------------------------
 */
-$config['additional_reg_fields'] = array(
-	array(
-		'name' => 'testing',
-		'public_name' => 'Testing',
-		'form_validation' => 'required',
-		'database_column' => 'data.david',
-		'input_type' 	=> 'text'
-	)
-);
-$config['table_settings'] = array('data' => 'user');
+$config['additional_reg_fields'] = array();
+$config['table_settings'] = array();
 
 /*
 |--------------------------------------------------------------------------
@@ -185,5 +177,5 @@ $config['recaptcha_private_key'] = '';
 $config['db_table_prefix'] = '';
 
 
-/* End of file tank_auth.php */
-/* Location: ./application/config/tank_auth.php */
+/* End of file croomy_auth.php */
+/* Location: ./application/config/croomy_auth.php */

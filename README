@@ -52,7 +52,7 @@ Installing Tank Auth
 5. Install database schema into your MySQL database.
 6. Open the application/config/config.php file in your CI installation and change $config['sess_use_database'] value to TRUE.
 That's it!
-Please don't forget to look into config files (tank_auth.php and email.php) if something will go wrong. The library should work perfectly right after installation, but depending on your server condition and your own needs some options would better be changed.
+Please don't forget to look into config files (croomy_auth.php and email.php) if something will go wrong. The library should work perfectly right after installation, but depending on your server condition and your own needs some options would better be changed.
 
 
 The library in a nutshell
