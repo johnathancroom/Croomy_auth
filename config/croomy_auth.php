@@ -52,6 +52,15 @@ $config['admin_approval'] = TRUE;
 
 /*
 |--------------------------------------------------------------------------
+| Super-Admin ID
+|
+| Specify the id of the user that can do everything. 
+|--------------------------------------------------------------------------
+*/
+$config['admin_user'] = 1;
+
+/*
+|--------------------------------------------------------------------------
 | Login settings
 |
 | 'login_by_username' = Username can be used to login.
