@@ -181,7 +181,7 @@ class Croomy_auth
 	 * @return	string
 	 */
 	function get_user_field($field) {
-		foreach $this->ci->config->item('additional_reg_fields', 'croomy_auth') as $line) {
+		foreach ($this->ci->config->item('additional_reg_fields', 'croomy_auth') as $line) {
 			if ($line['name'] == $field) {
 				$array = explode('.', $field['database_column']);
 			}
