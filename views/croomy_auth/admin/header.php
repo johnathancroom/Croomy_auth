@@ -2,6 +2,11 @@
 <html lang="en">
 <head>
 <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+        <style type="text/css">
+            body {
+                padding-top: 40px;
+            }
+        </style>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -15,9 +20,9 @@
           <a class="brand" href="#">Project name</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">Users</a></li>
-              <li><a href="#contact">Groups</a></li>
+              <li class="active"><?php echo anchor('admin/', 'Home'); ?></li>
+              <li><?php echo anchor('admin/users/', 'Users'); ?></li>
+              <li><?php echo anchor('admin/groups/', 'Groups'); ?></li>
             </ul>
 	<ul class="nav pull-right">
 		<li><?php echo anchor('auth/logout', 'Logout', ''); ?></li>

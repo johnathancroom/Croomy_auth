@@ -15,13 +15,30 @@ class Admin extends CI_Controller
 				redirect('');
 			}
 		}
+		$this->load->model('croomy_auth/admin_model');
 		$this->load->view('croomy_auth/admin/header');
 	}
 
 	function index()
 	{
 		$this->load->view('croomy_auth/admin/home');
+	}
+	
+	function users() {
+		$data['users'] = $this->admin_model->get_all_users();
+		$this->load->view('croomy_auth/admin/users', $data);
 	}	
+	
+	function delete_user() {
+		if ($id = $this->input->get('id', False)) {
+			if (is_numeric($id)) {
+				if ($this->admin_model->delete_user($id)) {
+					$this->session->set_flashdata('notice', "User $id has been removed");
+					redirect('admin/users');
+				}
+			}
+		}
+	}
 }
 
 /* End of file admin.php */
