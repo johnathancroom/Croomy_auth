@@ -194,7 +194,7 @@ class Croomy_auth
 			$col = $rules[$array[0]];
 		}	
 		$this->ci->db->select($array[1]);
-		$this->ci->db->where($col, $this->get_user());
+		$this->ci->db->where($col, $this->get_user_id());
 		return $this->ci->db->get($array[0])->row()->$array[1];
 	} 
 
