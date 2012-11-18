@@ -129,6 +129,22 @@ class Users extends CI_Model
 		return $query->num_rows() == 0;
 	}
 
+	function check_permission($user, $method) {
+		if (count($array = explode('.', $method)) == 1) {
+			$this->db->where('method', '*');
+		}
+		else {
+			$this->db->where('method', $array[1]);
+		}
+		$this->db->where('controller', $array[0]);
+		$this->db->where('user_id', $user);
+		$query = $this->db->get('user_permissions');
+		if ($query->num_rows() == 0) {
+			return False;
+		}
+		return True;
+	}
+
 	/**
 	 * Create new user record
 	 *

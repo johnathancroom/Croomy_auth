@@ -143,6 +143,18 @@ class Croomy_auth
 		return $this->ci->session->userdata('user_id');
 	}
 
+        function verify_perms($method) {
+                if ($this->is_logged_in() && $this->is_approved()) {
+                        $user = $this->get_user_id();
+			if (!$this->ci->users->check_permission($user, $method)) {
+				echo 'NOT ALLOWED!';
+			}
+                }
+		else {
+			redirect('auth/login');
+		}
+        }
+
 	/**
 	 * Get username
 	 *
