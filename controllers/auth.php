@@ -55,11 +55,8 @@ class Auth extends CI_Controller
 			}
 
 			$data['use_recaptcha'] = $this->config->item('use_recaptcha', 'croomy_auth');
-			if ($this->croomy_auth->is_max_login_attempts_exceeded($login)) {
-				if ($data['use_recaptcha'])
+			if ($this->croomy_auth->is_max_login_attempts_exceeded($login) && $this->config->item('use_recaptcha', 'croomy_auth')) {
 					$this->form_validation->set_rules('recaptcha_response_field', 'Confirmation Code', 'trim|xss_clean|required|callback__check_recaptcha');
-				else
-					$this->form_validation->set_rules('captcha', 'Confirmation Code', 'trim|xss_clean|required|callback__check_captcha');
 			}
 			$data['errors'] = array();
 
@@ -90,11 +87,7 @@ class Auth extends CI_Controller
 			$data['show_captcha'] = FALSE;
 			if ($this->croomy_auth->is_max_login_attempts_exceeded($login)) {
 				$data['show_captcha'] = TRUE;
-				if ($data['use_recaptcha']) {
-					$data['recaptcha_html'] = $this->_create_recaptcha();
-				} else {
-					$data['captcha_html'] = $this->_create_captcha();
-				}
+				$data['recaptcha_html'] = $this->_create_recaptcha();
 			}
 			$this->load->view('croomy_auth/login_form', $data);
 		}
