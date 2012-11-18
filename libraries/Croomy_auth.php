@@ -147,7 +147,8 @@ class Croomy_auth
                 if ($this->is_logged_in() && $this->is_approved()) {
                         $user = $this->get_user_id();
 			if (!$this->ci->users->check_permission($user, $method)) {
-				echo 'NOT ALLOWED!';
+				echo 'Access forbidden for user ' . $user;
+				exit();
 			}
                 }
 		else {
